@@ -1,3 +1,3 @@
-# BCD Converter Alexa
+# BCD Converter (Alexa skill)
 
-An Alexa Skill for converting binary coded decimals (BCD) into decimal
+An Alexa skill for converting binary coded decimals (BCD) into decimal
