@@ -3,20 +3,32 @@
 
 const Alexa = require('ask-sdk');
 
+const LaunchHandler = {
+  canHandle(handlerInput) {
+    const request = handlerInput.requestEnvelope.request;
+    return request.type === 'LaunchRequest';
+  },
+  handle(handlerInput) {
+    return handlerInput.responseBuilder
+      .speak(HELP_MESSAGE)
+      .reprompt(HELP_REPROMPT)
+      .getResponse();
+  },
+};
+
 const GetNumberHandler = {
   canHandle(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
-    return request.type === 'LaunchRequest'
-      || (request.type === 'IntentRequest'
-        && request.intent.name === 'NumberInputIntent');
+    return request.type === 'IntentRequest' &&
+      request.intent.name === 'NumberInputIntent';
   },
   handle(handlerInput) {
     var numberToConvert = handlerInput.requestEnvelope.request.intent.slots.inputNumber.value;
-    console.log(handlerInput.requestEnvelope.request.intent.slots.inputNumber.value);
+    //console.log("The input number is: " + handlerInput.requestEnvelope.request.intent.slots.inputNumber.value);
     const inputStore = numberToConvert.toString().split("");
     var resultStore = [];
     var i;
-    for (i=0; i<inputStore.length; i++){
+    for (i = 0; i < inputStore.length; i++) {
       var binary = resultStore[i] = parseInt(inputStore[i]).toString(2);
       var paddedBinary = binary.padStart(4, 0);
       resultStore[i] = paddedBinary.toString() + " ";
@@ -34,8 +46,8 @@ const GetNumberHandler = {
 const HelpHandler = {
   canHandle(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
-    return request.type === 'IntentRequest'
-      && request.intent.name === 'AMAZON.HelpIntent';
+    return request.type === 'IntentRequest' &&
+      request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
     return handlerInput.responseBuilder
@@ -48,13 +60,12 @@ const HelpHandler = {
 const ExitHandler = {
   canHandle(handlerInput) {
     const request = handlerInput.requestEnvelope.request;
-    return request.type === 'IntentRequest'
-      && (request.intent.name === 'AMAZON.CancelIntent'
-        || request.intent.name === 'AMAZON.StopIntent');
+    return request.type === 'IntentRequest' &&
+      (request.intent.name === 'AMAZON.CancelIntent' ||
+        request.intent.name === 'AMAZON.StopIntent');
   },
   handle(handlerInput) {
     return handlerInput.responseBuilder
-      .speak(STOP_MESSAGE)
       .getResponse();
   },
 };
@@ -88,12 +99,11 @@ const ErrorHandler = {
 const SKILL_NAME = 'BCD Converter';
 const HELP_MESSAGE = 'You can ask me to convert a number, or, you can say exit... What can I help you with?';
 const HELP_REPROMPT = 'What can I help you with?';
-const STOP_MESSAGE = 'Goodbye!';
-
 const skillBuilder = Alexa.SkillBuilders.standard();
 
 exports.handler = skillBuilder
   .addRequestHandlers(
+    LaunchHandler,
     GetNumberHandler,
     HelpHandler,
     ExitHandler,
