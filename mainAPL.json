@@ -1,0 +1,63 @@
+{
+    "type": "APL",
+    "version": "1.0",
+    "import": [
+      {
+        "name": "alexa-layouts",
+        "version": "1.0.0"
+      }
+    ],
+    "mainTemplate": {
+      "parameters": [
+        "payload"
+      ],
+      "items": [
+        {
+          "type": "Container",
+          "direction": "row",
+          "height": "100%",
+          "width": "100%",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "items": [
+            {
+              "type": "Container",
+              "direction": "column",
+              "position": "absolute",
+              "height": "100%",
+              "width": "100%",
+              "items": [
+                {
+                  "type": "Image",
+                  "source": "https://s3-eu-west-1.amazonaws.com/frogletappsalexa/bcdConverter/background.jpg",
+                  "scale": "fill",
+                  "width": 1920,
+                  "height": 1080
+                }
+              ]
+            },
+            {
+              "type": "Container",
+              "direction": "column",
+              "position": "absolute",
+              "height": "100%",
+              "width": "100%",
+              "items": [
+                {
+                  "type": "Text",
+                  "minHeight": 480,
+                  "minWidth": 480,
+                  "maxHeight": 1080,
+                  "maxWidth": 1920,
+                  "color": "#ffffff",
+                  "textAlign": "center",
+                  "textAlignVertical": "center",
+                  "text": "${payload.resource.data}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }

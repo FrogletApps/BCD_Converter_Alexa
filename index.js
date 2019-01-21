@@ -2,6 +2,7 @@
 /* eslint-disable  no-console */
 
 const Alexa = require('ask-sdk');
+const mainAPL = require('mainAPL.json');
 
 const LaunchHandler = {
   canHandle(handlerInput) {
@@ -9,10 +10,28 @@ const LaunchHandler = {
     return request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-    return handlerInput.responseBuilder
+    if (handlerInput.requestEnvelope.context.System.device.supportedInterfaces['Alexa.Presentation.APL']) {
+      return handlerInput.responseBuilder
+        .speak(HELP_MESSAGE)
+        .reprompt(HELP_REPROMPT)
+        .addDirective({
+            type: 'Alexa.Presentation.APL.RenderDocument',
+            version: '1.0',
+            document: mainAPL,
+            datasources: {
+              resource: {
+                data: HELP_SCREEN
+              }
+            }
+          })
+        .getResponse();
+    }
+    else{
+      return handlerInput.responseBuilder
       .speak(HELP_MESSAGE)
       .reprompt(HELP_REPROMPT)
       .getResponse();
+    }
   },
 };
 
@@ -34,12 +53,31 @@ const GetNumberHandler = {
       resultStore[i] = paddedBinary.toString() + " ";
     }
     const output = "The number " + numberToConvert + " is " + resultStore.join("") + "in Binary Coded Decimal";
+    const screenOutput = "The number <b>" + numberToConvert + "</b><br> is <b>" + resultStore.join("") + "</b><br>in Binary Coded Decimal";
     const speechOutput = output;
 
-    return handlerInput.responseBuilder
-      .speak(speechOutput)
-      .withSimpleCard(SKILL_NAME, output)
-      .getResponse();
+    if (handlerInput.requestEnvelope.context.System.device.supportedInterfaces['Alexa.Presentation.APL']) {
+      return handlerInput.responseBuilder
+        .speak(speechOutput)
+        .withSimpleCard(SKILL_NAME, output)
+        .addDirective({
+            type: 'Alexa.Presentation.APL.RenderDocument',
+            version: '1.0',
+            document: mainAPL,
+            datasources: {
+              resource: {
+                data: screenOutput
+              }
+            }
+          })
+        .getResponse();
+    }
+    else{
+      return handlerInput.responseBuilder
+        .speak(speechOutput)
+        .withSimpleCard(SKILL_NAME, output)
+        .getResponse();
+    }
   },
 };
 
@@ -97,6 +135,7 @@ const ErrorHandler = {
 };
 
 const SKILL_NAME = 'BCD Converter';
+const HELP_SCREEN = 'You can ask me to <br> <b>convert a number </b><br> or you can say <b>exit</b>';
 const HELP_MESSAGE = 'You can ask me to convert a number, or, you can say exit... What can I help you with?';
 const HELP_REPROMPT = 'What can I help you with?';
 const skillBuilder = Alexa.SkillBuilders.standard();
