@@ -15,22 +15,22 @@ const LaunchHandler = {
         .speak(HELP_MESSAGE)
         .reprompt(HELP_REPROMPT)
         .addDirective({
-            type: 'Alexa.Presentation.APL.RenderDocument',
-            version: '1.0',
-            document: mainAPL,
-            datasources: {
-              resource: {
-                data: HELP_SCREEN
-              }
+          type: 'Alexa.Presentation.APL.RenderDocument',
+          version: '1.0',
+          document: mainAPL,
+          datasources: {
+            resource: {
+              data: HELP_SCREEN
             }
-          })
+          }
+        })
         .getResponse();
     }
-    else{
+    else {
       return handlerInput.responseBuilder
-      .speak(HELP_MESSAGE)
-      .reprompt(HELP_REPROMPT)
-      .getResponse();
+        .speak(HELP_MESSAGE)
+        .reprompt(HELP_REPROMPT)
+        .getResponse();
     }
   },
 };
@@ -61,18 +61,18 @@ const GetNumberHandler = {
         .speak(speechOutput)
         .withSimpleCard(SKILL_NAME, output)
         .addDirective({
-            type: 'Alexa.Presentation.APL.RenderDocument',
-            version: '1.0',
-            document: mainAPL,
-            datasources: {
-              resource: {
-                data: screenOutput
-              }
+          type: 'Alexa.Presentation.APL.RenderDocument',
+          version: '1.0',
+          document: mainAPL,
+          datasources: {
+            resource: {
+              data: screenOutput
             }
-          })
+          }
+        })
         .getResponse();
     }
-    else{
+    else {
       return handlerInput.responseBuilder
         .speak(speechOutput)
         .withSimpleCard(SKILL_NAME, output)
@@ -135,9 +135,9 @@ const ErrorHandler = {
 };
 
 const SKILL_NAME = 'BCD Converter';
-const HELP_SCREEN = 'You can ask me to <br> <b>convert a number </b><br> or you can say <b>exit</b>';
 const HELP_MESSAGE = 'You can ask me to convert a number, or, you can say exit... What can I help you with?';
 const HELP_REPROMPT = 'What can I help you with?';
+const HELP_SCREEN = 'You can ask me to <br> <b>convert a number </b><br> or you can say <b>exit</b>';
 const skillBuilder = Alexa.SkillBuilders.standard();
 
 exports.handler = skillBuilder
